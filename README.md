@@ -100,5 +100,70 @@
             insertSort.showArray(); // [ 3, 4, 5, 6, 8, 10 ]
 ```
 >>> * 时间复杂度为O(N ^ 2)，插入排序能保证排序的稳定性。
+>>### 4.快速排序
+>>> ### 思路：
+>>> * 对于无序数组Array选定一个标志数K(数组末尾位置的数)，将小于K的数都移动到数组的左边区域，大于K的数都移动到数组的右边区域。
+>>> * 再对小于K的左边区域执行上述步骤，大于K的右边区域同理，递归执行划分区域的过程。
+>>> * 划分区域的过程如下：
+>>>> * 设置左边小于K的区域边界Small为数组开头索引，右边大于K的区域边界Large为数组倒数第二索引(因为数组末尾索引是标志数)，索引index用来遍历数组，初始化为数组开头索引。
+>>>> * 当Array[index] < 标志数K，将Array[index]与Array[small]交换，Small右移，index右移。
+>>>> * 当Array[index] = 标志数K，index右移，不采取任何动作。
+>>>> * 当Array[index] > 标志数K，将Array[index]与Array[large]交换，Large左移。
+>>>> * 当index大于右边界Large时，此时将K与Large位置后一个数交换。
+>>>> * 按照Small往左的数字作为一个数组，index往右的数字作为一个数组，继续进行上述步骤，直到左右边界无法划分数组为止(数组越界)。
+>>> * 完整代码如下：
+```typescript
+            interface IPartitionReturnType {
+                l:number; // 划分区域后左边数组的末尾索引
+                r:number; // 划分区域后右边数组的开始索引
+            }
 
+            export class QuickSort extends AbstractSort {
+                constructor(array:Array<number>){
+                    super(array);
+                }
+                private partition(array:Array<number>, left:number, right:number):IPartitionReturnType{ // 划分区域的过程
+                    let flag = array[right],
+                        Small = left, 
+                        Large = right - 1,
+                        index = left;
+                    while(index <= Large) {
+                        if (array[index] < flag) {
+                            Utils.swap(array, index, Small);
+                            index++;
+                            Small++;
+                        } else if (array[index] === flag) {
+                            index++;
+                        } else {
+                            Utils.swap(array, index, Large);
+                            Large--;
+                        }
+                    }
+                    Utils.swap(array, right, index);
+                    return {
+                        l: Small - 1,
+                        r: index + 1
+                    }
+                }
+                private quickSort(array:Array<number>, left:number, right:number){
+                    if(left >= right) return;
+                    const {l, r} = this.partition(array, left, right);
+                    this.quickSort(array, left, l);
+                    this.quickSort(array, r, right);
+                }
+                sort(): void {
+                    this.quickSort(this.array, 0, this.array.length - 1);
+                }
+                showArray(): void {
+                    console.log(this.array);
+                }
+                
+            }
+
+            const array = [5, 3, 6, 8, 10, 4];
+            const quickSort = new QuickSort(array); 
+            quickSort.sort();
+            quickSort.showArray(); // [ 3, 4, 5, 6, 8, 10 ]
+```
+>>> * 时间复杂度为O(N * logN)，快速排序不能保证排序的稳定性。
 
