@@ -24,8 +24,8 @@ export class SelectionSort extends AbstractSort {
 }
 
 const array = [5, 3, 6, 8, 10, 4];
-const bubbleSort = new SelectionSort(array); 
-bubbleSort.sort();
-bubbleSort.showArray(); // [ 3, 4, 5, 6, 8, 10 ]
+const selectionSort = new SelectionSort(array); 
+selectionSort.sort();
+selectionSort.showArray(); // [ 3, 4, 5, 6, 8, 10 ]
 
 

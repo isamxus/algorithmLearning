@@ -32,7 +32,7 @@
             bubbleSort.sort();
             bubbleSort.showArray(); // [ 3, 4, 5, 6, 8, 10 ]
 ```
->>> * 时间复杂度为O(N^2)。
+>>> * 时间复杂度为O(N ^ 2)，冒泡排序能保持排序的稳定性。
 >>### 2.选择排序
 >>> ### 思路：
 >>> * 在N个数字构成的无序数组中，假定第一个数是最小值，并遍历到数组末尾找到最小的数，两者交换位置，此时真正最小的数会被放置在数组最左边。
@@ -63,10 +63,42 @@
             }
 
             const array = [5, 3, 6, 8, 10, 4];
-            const bubbleSort = new SelectionSort(array); 
-            bubbleSort.sort();
-            bubbleSort.showArray(); // [ 3, 4, 5, 6, 8, 10 ]
+            const selectionSort = new SelectionSort(array); 
+            selectionSort.sort();
+            selectionSort.showArray(); // [ 3, 4, 5, 6, 8, 10 ]
 ```
+>>> * 时间复杂度为O(N ^ 2)，选择排序不能保证排序的稳定性。
+>>### 3.插入排序
+>>> ### 思路：
+>>> * 在N个数字构成的无序数组中，从第二个数字K1开始往前倒序遍历，查看K1是否小于前一个数字K2，如果K1 < K2，那么将两个数字位置互换，否则什么也不做。
+>>> * 从第三个数字开始往前倒序遍历，重复上述过程，直到该数字被交换到合适的位置(该位置的前一个数字小于该数字)为止。
+>>> * 直到数组最后一个数字交换到合适的位置后，数组整体变成有序。
+>>> * 完整代码如下：
+```typescript
+            export class InsertSort extends AbstractSort {
+                constructor(array:Array<number>){
+                    super(array);
+                }
+                sort(): void {
+                    const array = this.array;
+                    const length = array.length;
+                    for (let i = 1; i < length; i++) { // 选择第二个数开始往前遍历
+                        for (let j = i; j > 0 && array[j] < array[j - 1]; j--) { // 把选择的数跟前面的数比较，比前一个数小，就交换位置，再用交换位置后的数跟前面的数比较，直到该数大于前一个数为止
+                            Utils.swap(array, j, j - 1);
+                        }
+                    }
+                }
+                showArray(): void {
+                    console.log(this.array);
+                }
 
+            }
+
+            const array = [5, 3, 6, 8, 10, 4];
+            const insertSort = new InsertSort(array); 
+            insertSort.sort();
+            insertSort.showArray(); // [ 3, 4, 5, 6, 8, 10 ]
+```
+>>> * 时间复杂度为O(N ^ 2)，插入排序能保证排序的稳定性。
 
 
