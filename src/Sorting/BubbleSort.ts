@@ -1,7 +1,10 @@
+import { AbstractSort } from "./AbstractSort";
 import { Utils } from "./Utils";
 
-export class BubbleSort {
-    constructor(public array:Array<number>){}
+export class BubbleSort extends AbstractSort {
+    constructor(array:Array<number>){
+        super(array);
+    }
     sort(){
         const array = this.array;
         const length = array.length;
