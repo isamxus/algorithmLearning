@@ -166,4 +166,64 @@
             quickSort.showArray(); // [ 3, 4, 5, 6, 8, 10 ]
 ```
 >>> * 时间复杂度为O(N * logN)，快速排序不能保证排序的稳定性。
+>>### 5.归并排序
+>>> ### 思路：
+>>> * 以无序数组array的中间索引位置为中点，划分左右两组子数组，又以左右子数组各自的中间索引为中点，继续划分左右子数组，不断划分到数组无法再划分(子数组的元素个数为1或者0)为止。
+>>> * 对每一对左右子数组进行合并操作，L1代表左子数组的开始索引，L2代表右子数组的开始索引，变量index代表合并操作后的数组helper的开始索引，初始化为0，过程如下：
+>>>> * 当array[L1] > array[L2]时，将helper[index]位置的值设为array[L2]，index右移，L2右移。
+>>>> * 当array[L1] <= array[L2]时，将helper[index]位置的值设为array[L1]，index右移，L1右移。
+>>>> * 当L1右移超过左子数组的最大长度时，把右子数组的值填充到helper中。
+>>>> * 当L2右移超过右子数组的最大长度时，把右子数组的值填充到helper中。
+>>>> * 将helper数组中的值覆盖到原数组中。
+>>> * 问题的关键在于将大数组切割成最小单元的数组，然后对每一轮切割都采取相同的合并操作。
+>>> * 完整代码如下：
+```typescript
+            export class MergeSort extends AbstractSort {
+                constructor(array:Array<number>){
+                    super(array);
+                }
+                private merge(array:Array<number>, left:number, mid:number, right:number){ //合并数组操作
+                    let L1 = left,
+                        L2 = mid + 1,
+                        index = 0,
+                        helper = new Array(right - left + 1);
+                    
+                    while(L1 <= mid && L2 <= right) {
+                        if (array[L1] > array[L2]) {
+                            helper[index++] = array[L2++];
+                        } else if (array[L1] <= array[L2]) {
+                            helper[index++] = array[L1++];
+                        }
+                    }
+                    while(L1 <= mid) {
+                        helper[index++] = array[L1++];
+                    }
+                    while(L2 <= right) {
+                        helper[index++] = array[L2++];
+                    }
+                    for (let i = 0; i < helper.length; i++) {
+                        array[left+i] = helper[i];
+                    }
+                }
+                private mergeSort(array:Array<number>, left:number, right:number){ // 切割数组后合并数组
+                    if(left === right) return; // 切割到最小单位时中止切割
+                    const mid = (left + right) >> 1;
+                    this.mergeSort(array, left, mid);
+                    this.mergeSort(array, mid + 1, right);
+                    this.merge(array, left, mid, right);
+                }
+                sort(): void {
+                    this.mergeSort(this.array, 0, this.array.length - 1);
+                }
+                showArray(): void {
+                    console.log(this.array);
+                }
+                
+            }
 
+            const array = [5, 3, 6, 8, 10, 4];
+            const mergeSort = new MergeSort(array); 
+            mergeSort.sort();
+            mergeSort.showArray(); // [ 3, 4, 5, 6, 8, 10 ]
+```
+>>> * 时间复杂度为O(N * logN)，归并排序可以保证排序的稳定性。
